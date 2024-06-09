@@ -1,0 +1,13 @@
+/* src/components/Student/StudentProfile.css */
+.student-profile {
+    padding: 2em;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 1em;
+  }
+  
+  .student-profile h1 {
+    font-size: 2em;
+    color: #002147;
+  }
+  

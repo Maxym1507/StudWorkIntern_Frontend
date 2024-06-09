@@ -1,0 +1,25 @@
+.footer {
+    background-color: #002147;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1em;
+  }
+  
+  .footer-links a {
+    margin: 0 1em;
+    color: white;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  
