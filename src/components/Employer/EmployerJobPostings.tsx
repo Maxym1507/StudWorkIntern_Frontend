@@ -18,7 +18,7 @@ const EmployerJobPostings: React.FC<Props> = ({ employerId }) => {
     useEffect(() => {
         const fetchJobPostings = async () => {
             try {
-                const response = await api.get(`/employers/${employerId}/jobpostings`);
+                const response = await api.get(``);
                 setJobPostings(response.data);
             } catch (error) {
                 console.error('Error fetching job postings:', error);

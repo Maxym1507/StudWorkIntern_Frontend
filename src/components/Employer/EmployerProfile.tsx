@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../../api';
 import EmployerJobPostings from './EmployerJobPostings';
+import EmployerInternships from './EmployerInternships';
 import './EmployerProfile.css';
 
 interface Employer {
@@ -15,6 +16,7 @@ interface Employer {
 const EmployerProfile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [employer, setEmployer] = useState<Employer | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchEmployer = async () => {
@@ -23,14 +25,25 @@ const EmployerProfile: React.FC = () => {
                 setEmployer(response.data);
             } catch (error) {
                 console.error('Error fetching employer:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchEmployer();
     }, [id]);
 
-    if (!employer) {
+    if (loading) {
         return <div>Loading...</div>;
+    }
+
+    if (!employer) {
+        return (
+            <div>
+                <h1>Роботодавець не знайдений</h1>
+                <Link to="/employers/create" className="btn">Створити роботодавця</Link>
+            </div>
+        );
     }
 
     return (
@@ -42,7 +55,12 @@ const EmployerProfile: React.FC = () => {
                 <p>Email: {employer.contactEmail}</p>
                 <p>Телефон: {employer.contactPhoneNumber}</p>
             </div>
-            <EmployerJobPostings employerId={employer.employerId} />
+            <div className="actions">
+                <Link to={`/employer/${id}/jobpostings/create`} className="btn">Створити вакансію</Link>
+                <Link to={`/employer/${id}/internships/create`} className="btn">Створити стажування</Link>
+            </div>
+            <EmployerJobPostings employerId={Number(id)} />
+            <EmployerInternships employerId={Number(id)} />
         </div>
     );
 };

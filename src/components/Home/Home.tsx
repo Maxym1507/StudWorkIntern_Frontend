@@ -21,7 +21,12 @@ const Home: React.FC = () => {
                 <div className="home-section">
                     <h2>Для роботодавців</h2>
                     <p>Знайдіть талановитих працівників для вашої компанії.</p>
-                    <Link to="/employer" className="btn">Дізнатись більше</Link>
+                    <Link to="/employers" className="btn">Дізнатись більше</Link>
+                </div>
+                <div className="home-section">
+                    <h2>Створити профіль студента</h2>
+                    <p>Створіть новий профіль студента.</p>
+                    <Link to="/student/create" className="btn">Створити профіль</Link>
                 </div>
             </div>
         </div>

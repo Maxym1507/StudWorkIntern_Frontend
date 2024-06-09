@@ -1,0 +1,22 @@
+/* src/components/Employer/EmployerInternships.css */
+.employer-internships {
+    padding: 2em;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 1em 0;
+  }
+  
+  .employer-internships h2 {
+    font-size: 1.5em;
+    color: #002147;
+  }
+  
+  .employer-internships ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .employer-internships li {
+    padding: 0.5em 0;
+  }
+  

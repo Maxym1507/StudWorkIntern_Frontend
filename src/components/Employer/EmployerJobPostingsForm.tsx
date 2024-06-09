@@ -11,23 +11,26 @@ const EmployerJobPostingsForm: React.FC = () => {
         title: '',
         description: '',
         location: '',
-        salary: ''
+        salary: 0,
+        expirationDate: ''
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setJobPosting({
-            ...jobPosting,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        setJobPosting((prevJobPosting) => ({
+            ...prevJobPosting,
+            [name]: name === 'salary' ? Number(value) : value,
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post(`/employers/${employerId}/jobpostings`, jobPosting);
+            await api.post(``, jobPosting);
             alert('Вакансія створена успішно!');
         } catch (error) {
             console.error('Error creating job posting:', error);
+            alert('Сталася помилка при створенні вакансії');
         }
     };
 
@@ -36,13 +39,45 @@ const EmployerJobPostingsForm: React.FC = () => {
             <h1>Створити вакансію</h1>
             <form onSubmit={handleSubmit}>
                 <label>Назва:</label>
-                <input type="text" name="title" value={jobPosting.title} onChange={handleChange} required />
+                <input
+                    type="text"
+                    name="title"
+                    value={jobPosting.title}
+                    onChange={handleChange}
+                    required
+                />
                 <label>Опис:</label>
-                <input type="text" name="description" value={jobPosting.description} onChange={handleChange} required />
+                <input
+                    type="text"
+                    name="description"
+                    value={jobPosting.description}
+                    onChange={handleChange}
+                    required
+                />
                 <label>Локація:</label>
-                <input type="text" name="location" value={jobPosting.location} onChange={handleChange} required />
+                <input
+                    type="text"
+                    name="location"
+                    value={jobPosting.location}
+                    onChange={handleChange}
+                    required
+                />
                 <label>Зарплата:</label>
-                <input type="number" name="salary" value={jobPosting.salary} onChange={handleChange} required />
+                <input
+                    type="number"
+                    name="salary"
+                    value={jobPosting.salary}
+                    onChange={handleChange}
+                    required
+                />
+                <label>Дата закінчення терміну дії:</label>
+                <input
+                    type="date"
+                    name="expirationDate"
+                    value={jobPosting.expirationDate}
+                    onChange={handleChange}
+                    required
+                />
                 <button type="submit">Створити</button>
             </form>
         </div>
