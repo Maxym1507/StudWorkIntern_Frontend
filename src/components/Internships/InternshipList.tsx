@@ -1,39 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import './InternshipList.css';
 
-interface Internship {
-    internshipId: number;
-    title: string;
-    companyName: string;
-    location: string;
-}
-
 const InternshipList: React.FC = () => {
-    const [internships, setInternships] = useState<Internship[]>([]);
+    const [internships, setInternships] = useState([]);
+    const [studentId, setStudentId] = useState<number>(1); // Replace with actual student ID logic
 
     useEffect(() => {
         const fetchInternships = async () => {
-            try {
-                const response = await api.get('/internships');
-                setInternships(response.data);
-            } catch (error) {
-                console.error('Error fetching internships:', error);
-            }
+            const response = await api.get('/Internships');
+            setInternships(response.data);
         };
-
         fetchInternships();
     }, []);
 
+    const handleApply = async (internshipId: number) => {
+        try {
+            const application = {
+                studentId,
+                internshipId,
+                applicationDate: new Date().toISOString()
+            };
+            await api.post('/Applications', application);
+            alert('Ви успішно подали заявку на стажування!');
+        } catch (error) {
+            console.error('Error applying for internship:', error);
+            alert('Сталася помилка при подачі заявки на стажування.');
+        }
+    };
+
     return (
         <div className="internship-list">
-            <h1>Список стажувань</h1>
+            <h1>Стажування</h1>
             <ul>
-                {internships.map(internship => (
+                {internships.map((internship: any) => (
                     <li key={internship.internshipId}>
-                        <h3>{internship.title}</h3>
-                        <p>Компанія: {internship.companyName}</p>
-                        <p>Локація: {internship.location}</p>
+                        <h2>{internship.title}</h2>
+                        <p>{internship.description}</p>
+                        <p>{internship.location}</p>
+                        <p>Початок: {internship.startDate}</p>
+                        <p>Кінець: {internship.endDate}</p>
+                        <button onClick={() => handleApply(internship.internshipId)}>Подати заявку</button>
                     </li>
                 ))}
             </ul>

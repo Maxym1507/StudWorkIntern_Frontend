@@ -1,41 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import './JobList.css';
 
-interface JobPosting {
-    jobPostingId: number;
-    title: string;
-    companyName: string;
-    location: string;
-    salary: number;
-}
-
 const JobList: React.FC = () => {
-    const [jobPostings, setJobPostings] = useState<JobPosting[]>([]);
+    const [jobs, setJobs] = useState([]);
+    const [studentId, setStudentId] = useState<number>(1); // Replace with actual student ID logic
 
     useEffect(() => {
-        const fetchJobPostings = async () => {
-            try {
-                const response = await api.get('/jobpostings');
-                setJobPostings(response.data);
-            } catch (error) {
-                console.error('Error fetching job postings:', error);
-            }
+        const fetchJobs = async () => {
+            const response = await api.get('/JobPostings');
+            setJobs(response.data);
         };
-
-        fetchJobPostings();
+        fetchJobs();
     }, []);
+
+    const handleApply = async (jobId: number) => {
+        try {
+            const application = {
+                studentId,
+                jobPostingId: jobId,
+                applicationDate: new Date().toISOString()
+            };
+            await api.post('/Applications', application);
+            alert('Ви успішно подали заявку на вакансію!');
+        } catch (error) {
+            console.error('Error applying for job:', error);
+            alert('Сталася помилка при подачі заявки на вакансію.');
+        }
+    };
 
     return (
         <div className="job-list">
-            <h1>Список вакансій</h1>
+            <h1>Вакансії</h1>
             <ul>
-                {jobPostings.map(jobPosting => (
-                    <li key={jobPosting.jobPostingId}>
-                        <h3>{jobPosting.title}</h3>
-                        <p>Компанія: {jobPosting.companyName}</p>
-                        <p>Локація: {jobPosting.location}</p>
-                        <p>Зарплата: {jobPosting.salary}</p>
+                {jobs.map((job: any) => (
+                    <li key={job.jobPostingId}>
+                        <h2>{job.title}</h2>
+                        <p>{job.description}</p>
+                        <p>{job.location}</p>
+                        <p>Зарплата: {job.salary}</p>
+                        <button onClick={() => handleApply(job.jobPostingId)}>Подати заявку</button>
                     </li>
                 ))}
             </ul>

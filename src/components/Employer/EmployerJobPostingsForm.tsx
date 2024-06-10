@@ -11,26 +11,37 @@ const EmployerJobPostingsForm: React.FC = () => {
         title: '',
         description: '',
         location: '',
-        salary: 0,
-        expirationDate: ''
+        salary: '',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setJobPosting((prevJobPosting) => ({
             ...prevJobPosting,
-            [name]: name === 'salary' ? Number(value) : value,
+            [name]: value,
         }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post(``, jobPosting);
+            const response = await api.post('/JobPostings', {
+                ...jobPosting,
+                salary: parseFloat(jobPosting.salary),
+                employerId: employerId
+            });
             alert('Вакансія створена успішно!');
+            console.log('Created job posting:', response.data);
+            // Clear form fields after successful submission
+            setJobPosting({
+                title: '',
+                description: '',
+                location: '',
+                salary: '',
+            });
         } catch (error) {
             console.error('Error creating job posting:', error);
-            alert('Сталася помилка при створенні вакансії');
+            alert(`Сталася помилка при створенні вакансії`);
         }
     };
 
@@ -64,17 +75,9 @@ const EmployerJobPostingsForm: React.FC = () => {
                 />
                 <label>Зарплата:</label>
                 <input
-                    type="number"
+                    type="text"
                     name="salary"
                     value={jobPosting.salary}
-                    onChange={handleChange}
-                    required
-                />
-                <label>Дата закінчення терміну дії:</label>
-                <input
-                    type="date"
-                    name="expirationDate"
-                    value={jobPosting.expirationDate}
                     onChange={handleChange}
                     required
                 />

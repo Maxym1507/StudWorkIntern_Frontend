@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../../api';
 import './EmployerInternshipsForm.css';
@@ -10,31 +10,66 @@ const EmployerInternshipsForm: React.FC = () => {
     const [internship, setInternship] = useState({
         title: '',
         description: '',
-        location: ''
+        location: '',
+        startDate: '',
+        endDate: '',
     });
+
+    const [isEmployerValid, setIsEmployerValid] = useState(false);
+
+    useEffect(() => {
+        const checkEmployerExists = async () => {
+            try {
+                const response = await api.get(`/Employers/${employerId}`);
+                if (response.status === 200) {
+                    setIsEmployerValid(true);
+                }
+            } catch (error) {
+                setIsEmployerValid(false);
+            }
+        };
+
+        checkEmployerExists();
+    }, [employerId]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInternship((prevInternship) => ({
             ...prevInternship,
-            [name]: value
+            [name]: value,
         }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!isEmployerValid) {
+            alert('Invalid Employer ID. Please check the ID and try again.');
+            return;
+        }
         try {
-            await api.post(``, internship);
-            alert('Стажування створено успішно!');
+            const response = await api.post('/Internships', {
+                ...internship,
+                employerId: employerId
+            });
+            alert('Інтернатура створена успішно!');
+            console.log('Created internship:', response.data);
+            // Clear form fields after successful submission
+            setInternship({
+                title: '',
+                description: '',
+                location: '',
+                startDate: '',
+                endDate: '',
+            });
         } catch (error) {
             console.error('Error creating internship:', error);
-            alert('Сталася помилка при створенні стажування');
+            alert(`Сталася помилка при створенні інтернатури`);
         }
     };
 
     return (
         <div className="employer-internships-form">
-            <h1>Створити стажування</h1>
+            <h1>Створити інтернатуру</h1>
             <form onSubmit={handleSubmit}>
                 <label>Назва:</label>
                 <input
@@ -60,7 +95,23 @@ const EmployerInternshipsForm: React.FC = () => {
                     onChange={handleChange}
                     required
                 />
-                <button type="submit">Створити</button>
+                <label>Дата початку:</label>
+                <input
+                    type="date"
+                    name="startDate"
+                    value={internship.startDate}
+                    onChange={handleChange}
+                    required
+                />
+                <label>Дата закінчення:</label>
+                <input
+                    type="date"
+                    name="endDate"
+                    value={internship.endDate}
+                    onChange={handleChange}
+                    required
+                />
+                <button type="submit" disabled={!isEmployerValid}>Створити</button>
             </form>
         </div>
     );
