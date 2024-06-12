@@ -1,13 +1,57 @@
 /* src/components/Employer/EmployerProfile.css */
 .employer-profile {
-    padding: 2em;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 1em;
-  }
-  
-  .employer-profile h1 {
-    font-size: 2em;
-    color: #002147;
-  }
-  
+  padding: 2em;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 1em;
+}
+
+.employer-profile h1 {
+  font-size: 2em;
+  color: #002147;
+}
+
+.employer-profile p {
+  font-size: 1.2em;
+  margin: 0.5em 0;
+}
+
+.employer-profile .btn {
+  background-color: #002147;
+  color: white;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 1em;
+}
+
+.employer-profile .btn:hover {
+  background-color: #001532;
+}
+
+.employer-profile h2 {
+  margin-top: 2em;
+  font-size: 1.5em;
+  color: #002147;
+}
+
+.employer-profile ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.employer-profile li {
+  padding: 1em 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.employer-profile li h3 {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.employer-profile li p {
+  margin: 0.2em 0;
+}
